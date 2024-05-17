@@ -16,7 +16,7 @@ use Drupal\hbkcolissimochrono\HbkcolissimochronoAjax;
  * and reset profile data if a non-relay method is selected.
  */
 class ShippingInformationHbkcolissimochrono extends ShippingInformation {
-  
+
   /**
    *
    * {@inheritdoc}
@@ -47,13 +47,15 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
        * @var \Drupal\commerce_shipping\Entity\Shipment $commerce_shipment
        */
       $commerce_shipment = $pane_form['shipments'][0]['#shipment'];
-      
+
+
+      $shippingMethod = $commerce_shipment->getShippingMethod();
       /**
        *
        * @var \Drupal\hbkcolissimochrono\Plugin\Commerce\ShippingMethod\HbkColissimo $shipping_method
        */
-      $shipping_method = $commerce_shipment->getShippingMethod()->getPlugin();
-      if ($shipping_method instanceof \Drupal\hbkcolissimochrono\Plugin\Commerce\ShippingMethod\HbkShippingInterface && $shipping_method->isRelay()) {
+      $shipping_method = isset($shippingMethod) ? $shippingMethod->getPlugin() : null;
+      if (isset($shipping_method) && $shipping_method instanceof \Drupal\hbkcolissimochrono\Plugin\Commerce\ShippingMethod\HbkShippingInterface && $shipping_method->isRelay()) {
         // On effectue la demande afin d'accelerer la demande qui se ferra via
         // la selection des methode ajax.
         /**
@@ -62,7 +64,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
          */
         $default_settings = \Drupal::service('hbkcolissimochrono.default_settings');
         $default_settings->getWidgetAuthenticationToken();
-        
+
         // On definie un champs textarea caché mais qui doit contenir les
         // informations du pickup si necessaire.
         $hbkcolissimochrono_pickup_book = $this->order->getData('hbkcolissimochrono_pickup_book');
@@ -101,8 +103,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
             ]
           ]
         ];
-      }
-      else {
+      } else {
         // On vide les données dans le cas contraire.
         $pane_form['hbkcolissimochrono_pickup']['hbkcolissimochrono_pickup_book'] = [
           '#type' => 'hidden',
@@ -127,7 +128,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     ];
     return $pane_form;
   }
-  
+
   /**
    * Afin de palier à ce bug :
    * https://www.drupal.org/project/commerce_shipping/issues/3226851
@@ -155,14 +156,14 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     }
     // dd($element);
   }
-  
+
   static public function hbkcolissimochrono_pickup_book_validate(&$element, FormStateInterface $form_state, $form) {
     $button = $form_state->getTriggeringElement();
     if ($button['#type'] == 'submit' && $button['#name'] == 'op' && empty($element['#value'])) {
       $form_state->setError($element, "Vous devez definir une adresse colissimo");
     }
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -181,7 +182,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     }
     return $summary;
   }
-  
+
   protected function buildPointHtml($hbkcolissimochrono_pickup_book) {
     $string = '';
     if (!empty($hbkcolissimochrono_pickup_book)) {
@@ -199,7 +200,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
       return "Selectionner une relais";
     return $string;
   }
-  
+
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // dd($form_state->getValues());
     $hbkcolissimochrono_pickup_book = $form_state->getValue([
@@ -214,14 +215,14 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     }
     parent::submitPaneForm($pane_form, $form_state, $complete_form);
   }
-  
+
   public static function ajaxOpenModal(array $form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
     // add custom js.
     HbkcolissimochronoAjax::addCommandColissimoPickUp($response, $form, $form_state);
     return $response;
   }
-  
+
   /**
    *
    * @param array $form
@@ -234,7 +235,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     HbkcolissimochronoAjax::addCommandColissimoPickUp($response, $form, $form_state);
     return $response;
   }
-  
+
   /**
    *
    * @param FormStateInterface $form_state
@@ -255,5 +256,4 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     }
     return self::$order;
   }
-  
 }
