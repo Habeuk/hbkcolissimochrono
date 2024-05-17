@@ -1,11 +1,37 @@
 <?php
 use Drupal\hbkcolissimochrono\Plugin\Commerce\CheckoutPane\ShippingInformationHbkcolissimochrono;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  *
  * @file
  * Primary module hooks for hbk colissimo chrono module.
  */
+
+/**
+ * implement hook_entity_base_field_info
+ *
+ * @param EntityTypeInterface $entity_type
+ */
+function hbkcolissimochrono_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+  if ($entity_type->id() == 'commerce_shipment') {
+    /**
+     * Pour sauvegarder les données colissimo.
+     */
+    $fields["hbkcolissimochrono_pickup"] = BaseFieldDefinition::create('text_long')->setLabel(" Description ")->setDisplayOptions('form', [
+      'type' => 'text_textarea',
+      'weight' => 0
+    ])->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'text_default',
+      'weight' => 0
+    ])->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', true);
+  }
+  return $fields;
+}
 
 /**
  * implement hook_commerce_checkout_pane_info_alter
