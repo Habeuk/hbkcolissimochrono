@@ -11,22 +11,26 @@ $svg_edit: '<svg xmlns="http://www.w3.org/2000/svg" fill="#{$wbu-background}" wi
   // background-repeat: no-repeat;
   // background-position: 92% center;
   overflow: hidden;
-  .pickup-html::before {
-    background-image: url("https://www.colissimo.entreprise.laposte.fr/sites/default/files/2021-03/Cube_cartographie_points_retraits_60px.png");
-    content: "";
-    display: block;
-    position: absolute;
-    left: 0;
-    height: 100%;
-    bottom: 0;
-    top: 0;
-    right: 0;
-    z-index: -1;
-    opacity: 0.3;
-    background-repeat: no-repeat;
-    background-position: 90% center;
-    background-size: auto 50%;
-    @include WBUtransition();
+  .pickup-html {
+    position: relative;
+    z-index: 1;
+    &::before {
+      background-image: url("https://www.colissimo.entreprise.laposte.fr/sites/default/files/2021-03/Cube_cartographie_points_retraits_60px.png");
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      height: 100%;
+      bottom: 0;
+      top: 0;
+      right: 0;
+      z-index: -1;
+      opacity: 0.3;
+      background-repeat: no-repeat;
+      background-position: 90% center;
+      background-size: auto 50%;
+      @include WBUtransition();
+    }
   }
   .hbkcolissimochrono-pickup-button {
     position: absolute;

@@ -16,7 +16,7 @@ use Drupal\hbkcolissimochrono\HbkcolissimochronoAjax;
  * and reset profile data if a non-relay method is selected.
  */
 class ShippingInformationHbkcolissimochrono extends ShippingInformation {
-
+  
   /**
    *
    * {@inheritdoc}
@@ -47,8 +47,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
        * @var \Drupal\commerce_shipping\Entity\Shipment $commerce_shipment
        */
       $commerce_shipment = $pane_form['shipments'][0]['#shipment'];
-
-
+      
       $shippingMethod = $commerce_shipment->getShippingMethod();
       /**
        *
@@ -64,10 +63,11 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
          */
         $default_settings = \Drupal::service('hbkcolissimochrono.default_settings');
         $default_settings->getWidgetAuthenticationToken();
-
+        
         // On definie un champs textarea caché mais qui doit contenir les
         // informations du pickup si necessaire.
-        $hbkcolissimochrono_pickup_book = $this->order->getData('hbkcolissimochrono_pickup_book');
+        $hbkcolissimochrono_pickup_book = $commerce_shipment->get('hbkcolissimochrono_pickup')->first() ? $commerce_shipment->get('hbkcolissimochrono_pickup')->first()->getValue() : [];
+        $hbkcolissimochrono_pickup_book = $hbkcolissimochrono_pickup_book['value'] ?? '';
         $pane_form['hbkcolissimochrono_pickup']['hbkcolissimochrono_pickup_book'] = [
           '#type' => 'hidden',
           '#attributes' => [
@@ -103,7 +103,8 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
             ]
           ]
         ];
-      } else {
+      }
+      else {
         // On vide les données dans le cas contraire.
         $pane_form['hbkcolissimochrono_pickup']['hbkcolissimochrono_pickup_book'] = [
           '#type' => 'hidden',
@@ -128,13 +129,12 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     ];
     return $pane_form;
   }
-
+  
   /**
    * Afin de palier à ce bug :
    * https://www.drupal.org/project/commerce_shipping/issues/3226851
    * Le validateur permet de charger la methode de Shipping et de verifier si
-   * elle
-   * est compatible avec la methode de paiement.
+   * elle est compatible avec la methode de paiement.
    *
    * @param array $element
    * @param FormStateInterface $form_state
@@ -158,14 +158,14 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     }
     // dd($element);
   }
-
+  
   static public function hbkcolissimochrono_pickup_book_validate(&$element, FormStateInterface $form_state, $form) {
     $button = $form_state->getTriggeringElement();
     if ($button['#type'] == 'submit' && $button['#name'] == 'op' && empty($element['#value'])) {
       $form_state->setError($element, "Vous devez definir une adresse colissimo");
     }
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -173,18 +173,22 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
   public function buildPaneSummary() {
     $summary = parent::buildPaneSummary();
     if ($this->isVisible()) {
-      $hbkcolissimochrono_pickup_book = $this->order->getData('hbkcolissimochrono_pickup_book');
-      if ($hbkcolissimochrono_pickup_book) {
-        $summary['hbkcolissimochrono_pickup_edit'] = [
-          '#type' => "markup",
-          "#markup" => '<div class="hbkcolissimochrono-pickup-edit my-3"><div class="pickup-html">' . $this->buildPointHtml($hbkcolissimochrono_pickup_book) . '</div>'
-        ];
-        $summary['#attached']['library'][] = 'hbkcolissimochrono/hbkcolissimochrono';
-      }
+      // $hbkcolissimochrono_pickup_book =
+      // $this->order->getData('hbkcolissimochrono_pickup_book');
+      // if ($hbkcolissimochrono_pickup_book) {
+      // $summary['hbkcolissimochrono_pickup_edit'] = [
+      // '#type' => "markup",
+      // "#markup" => '<div class="hbkcolissimochrono-pickup-edit my-3"><div
+      // class="pickup-html">' .
+      // $this->buildPointHtml($hbkcolissimochrono_pickup_book) . '</div>'
+      // ];
+      // utiliser pour afficher l'icone colissimo.
+      // $summary['#attached']['library'][] =
+      // 'hbkcolissimochrono/hbkcolissimochrono';
     }
     return $summary;
   }
-
+  
   protected function buildPointHtml($hbkcolissimochrono_pickup_book) {
     $string = '';
     if (!empty($hbkcolissimochrono_pickup_book)) {
@@ -202,7 +206,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
       return "Selectionner une relais";
     return $string;
   }
-
+  
   public function submitPaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // dd($form_state->getValues());
     $hbkcolissimochrono_pickup_book = $form_state->getValue([
@@ -212,19 +216,29 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     ]);
     // Save colisomo data
     if ($this->order) {
-      $this->order->setData('hbkcolissimochrono_pickup_book', $hbkcolissimochrono_pickup_book);
-      $this->order->save();
+      /**
+       *
+       * @var \Drupal\commerce_shipping\Entity\Shipment $commerce_shipment
+       */
+      $commerce_shipment = $pane_form['shipments'][0]['#shipment'];
+      if ($commerce_shipment) {
+        $commerce_shipment->set('hbkcolissimochrono_pickup', $hbkcolissimochrono_pickup_book);
+        $commerce_shipment->save();
+      }
+      // $this->order->setData('hbkcolissimochrono_pickup_book',
+      // $hbkcolissimochrono_pickup_book);
+      // $this->order->save();
     }
     parent::submitPaneForm($pane_form, $form_state, $complete_form);
   }
-
+  
   public static function ajaxOpenModal(array $form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
     // add custom js.
     HbkcolissimochronoAjax::addCommandColissimoPickUp($response, $form, $form_state);
     return $response;
   }
-
+  
   /**
    *
    * @param array $form
@@ -237,7 +251,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     HbkcolissimochronoAjax::addCommandColissimoPickUp($response, $form, $form_state);
     return $response;
   }
-
+  
   /**
    *
    * @param FormStateInterface $form_state
@@ -258,4 +272,5 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
     }
     return self::$order;
   }
+  
 }

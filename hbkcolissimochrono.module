@@ -21,12 +21,9 @@ function hbkcolissimochrono_entity_base_field_info(EntityTypeInterface $entity_t
     /**
      * Pour sauvegarder les données colissimo.
      */
-    $fields["hbkcolissimochrono_pickup"] = BaseFieldDefinition::create('text_long')->setLabel(" Description ")->setDisplayOptions('form', [
-      'type' => 'text_textarea',
-      'weight' => 0
-    ])->setDisplayOptions('view', [
+    $fields["hbkcolissimochrono_pickup"] = BaseFieldDefinition::create('text_long')->setLabel(" Colissimo pickup ")->setDisplayOptions('form', [])->setDisplayOptions('view', [
       'label' => 'hidden',
-      'type' => 'text_default',
+      'type' => 'hbkcoliickup_formatter',
       'weight' => 0
     ])->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', true);
   }
