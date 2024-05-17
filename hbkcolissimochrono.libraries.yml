@@ -1,0 +1,18 @@
+hbkcolissimochrono:
+  css:
+    theme:
+      css/hbkcolissimochrono.css: {}
+  js:
+    js/hbkcolissimochrono.js: {}
+  dependencies:
+    - hbkcolissimochrono/libs
+    - core/drupal.ajax
+
+libs:
+  css:
+    theme:
+      https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css: {type: external}
+  js:
+    https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js: {type: external}
+    https://ws.colissimo.fr/widget-colissimo/js/jquery.plugin.colissimo.min.js: {type: external}
+

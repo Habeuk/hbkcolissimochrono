@@ -1,0 +1,7 @@
+name: 'hbk Colissimo & Chronopost '
+type: module
+description: 'Module permettant de mettre en place les moyens de livraisons de la poste en France'
+package: Custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - commerce_shipping:commerce_shipping

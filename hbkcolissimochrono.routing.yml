@@ -1,0 +1,15 @@
+hbkcolissimochrono.settings:
+  path: '/admin/config/system/settings'
+  defaults:
+    _title: 'Settings'
+    _form: 'Drupal\hbkcolissimochrono\Form\SettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+hbkcolissimochrono.manuel_export_shipping:
+  path: '/admin/commerce/hbkcolissimochrono/manuel-export-shipping'
+  defaults:
+    _title: 'manuel export shipping'
+    _controller: '\Drupal\hbkcolissimochrono\Controller\HbkcolissimochronoController'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,38 @@
+<?php
+use Drupal\hbkcolissimochrono\Plugin\Commerce\CheckoutPane\ShippingInformationHbkcolissimochrono;
+
+/**
+ *
+ * @file
+ * Primary module hooks for hbk colissimo chrono module.
+ */
+
+/**
+ * implement hook_commerce_checkout_pane_info_alter
+ * ( cela permet de remplacer les classes par defaut ).
+ */
+function hbkcolissimochrono_commerce_checkout_pane_info_alter(&$definitions) {
+  if (!empty($definitions['shipping_information']['class']) && $definitions['shipping_information']['provider'] == 'commerce_shipping') {
+    $definitions['shipping_information']['class'] = ShippingInformationHbkcolissimochrono::class;
+  }
+}
+
+/**
+ * implement hook_theme
+ *
+ * @param string $existing
+ * @param string $type
+ * @param string $theme
+ * @param string $path
+ */
+function hbkcolissimochrono_theme($existing, $type, $theme, $path) {
+  return [
+    'hbkcolissimochrono_pickup' => [
+      'variables' => [
+        'settings' => [],
+        'address' => [],
+        'attributes' => NULL
+      ]
+    ]
+  ];
+}

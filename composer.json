@@ -1,0 +1,16 @@
+{
+    "name": "habeuk/hbkcolissimochrono",
+    "description": "Module permettant de mettre en place les moyens de livraisons de la poste en France",
+    "type": "drupal-custom-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kouwa stephane",
+            "email": "kksasteph888@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+    	"drupal/commerce_shipping": "^2.8.0"
+    }
+}

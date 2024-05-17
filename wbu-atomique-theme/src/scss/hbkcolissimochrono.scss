@@ -1,0 +1,122 @@
+@use "@stephane888/wbu-atomique/scss/wbu-ressources-clean.scss" as *;
+// On surcharge les valeurs remps en px afin d'eviter de mauvaise supprise.
+$wbu-margin: 20px;
+.hbkcolissimochrono_pickup {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+
+  @include WBUtransition();
+  > .content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .widget-pickup {
+    width: 100%;
+    height: 100%;
+    min-width: 300px;
+    min-height: 300px;
+    max-width: 1000px;
+    max-height: calc(100vh - 100px);
+    overflow: auto;
+  }
+  // z-index: -9;
+  .overlay {
+    position: absolute;
+    background-color: rgba($color: #333, $alpha: 80%);
+    left: 0;
+    right: 0;
+    // bottom: 0;
+    height: 100%;
+    min-height: 100vh;
+    top: 0;
+    z-index: 1;
+  }
+  .block-title {
+    position: absolute;
+    top: 0;
+    left: -50%;
+    transform: translate(50%, 15px);
+  }
+  .hbk__container {
+    transform: translateY(-10%);
+    opacity: 0;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    // align-items: center;
+    @include WBUtransition();
+    max-height: 100%;
+    width: 100%;
+    .hbk_content {
+      position: relative;
+      z-index: 2;
+      border-radius: $wbu-margin * 0.25;
+      background: #fff;
+      padding: $wbu-margin * 0.5 0;
+      margin: $wbu-margin * 2 $wbu-margin * 0.25;
+      height: 100%;
+      width: 100%;
+      @include media-min(DD) {
+        padding: $wbu-margin;
+        margin: $wbu-margin * 3 0;
+        width: auto;
+      }
+    }
+    position: relative;
+    z-index: 2;
+    .svg-close {
+      position: absolute;
+      border-radius: 50%;
+      padding: $wbu-margin * 0.2;
+      width: $wbu-margin * 1.5;
+      height: $wbu-margin * 1.5;
+      background: #fff;
+      fill: #000;
+      border: 1px solid #555;
+      left: auto;
+      right: 0;
+      bottom: auto;
+      top: -$wbu-margin * 1.7;
+      @include WBUtransition();
+      @include media-min(DD) {
+        right: -$wbu-margin * 2;
+        top: -$wbu-margin * 2;
+        padding: $wbu-margin * 0.4;
+        width: $wbu-margin * 2;
+        height: $wbu-margin * 2;
+      }
+      &:hover {
+        background: #f00;
+        fill: #fff;
+      }
+      cursor: pointer;
+    }
+  }
+  &.open {
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    .hbk__container {
+      opacity: 1;
+      transform: translateY(0);
+      height: 100%;
+      @include media-min(MD) {
+        height: auto;
+      }
+    }
+  }
+}
+body.modal-open {
+  overflow: hidden;
+}
