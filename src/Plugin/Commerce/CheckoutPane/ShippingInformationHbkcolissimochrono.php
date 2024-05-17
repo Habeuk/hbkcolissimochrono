@@ -103,7 +103,16 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
         ];
       }
       else {
-        // on se rassure que le
+        // On vide les données dans le cas contraire.
+        $pane_form['hbkcolissimochrono_pickup']['hbkcolissimochrono_pickup_book'] = [
+          '#type' => 'hidden',
+          '#attributes' => [
+            'class' => [
+              'hbkcolissimochrono-pickup-book-edit'
+            ]
+          ],
+          '#default_value' => ''
+        ];
       }
     }
     /**
@@ -199,7 +208,7 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
       'hbkcolissimochrono_pickup_book'
     ]);
     // Save colisomo data
-    if ($hbkcolissimochrono_pickup_book && $this->order) {
+    if ($this->order) {
       $this->order->setData('hbkcolissimochrono_pickup_book', $hbkcolissimochrono_pickup_book);
       $this->order->save();
     }
