@@ -152,7 +152,9 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
        * @var \Drupal\commerce_shipping\Entity\ShippingMethod $commerce_shipping_method
        */
       $commerce_shipping_method = $shipment->getShippingMethod();
-      $commerce_shipping_method->applies($shipment);
+      if (isset($commerce_shipping_method)) {
+        $commerce_shipping_method->applies($shipment);
+      }
     }
     // dd($element);
   }
