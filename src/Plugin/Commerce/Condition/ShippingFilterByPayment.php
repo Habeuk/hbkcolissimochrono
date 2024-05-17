@@ -79,12 +79,13 @@ class ShippingFilterByPayment extends ConditionBase {
     // because Prophecy doesn't support magic properties.
     $payment_gateway_item = $order->get('payment_gateway')->first()->getValue();
     $payment_gateway_id = $payment_gateway_item['target_id'];
-    // \Stephane888\Debug\debugLog::kintDebugDrupal($payment_gateway_item,
-    // 'evaluate__' . $payment_gateway_id, true);
-    // $payment_gateway_id2 = $order->getData('payment_gateway_id');
-    // \Stephane888\Debug\debugLog::kintDebugDrupal($payment_gateway_item,
-    // 'evaluate__getData__' . $payment_gateway_id2, true);
-    
+    // On a un bug voir la tache #831. Pour reduire l'impact du bug, on va
+    // valider la methode de livraisons si le champs 'payment_gateway' est vide.
+    // Pour que cela fonctionne bien il faudra que le premier moyen de paiement
+    // accepte tous les moyens de livraisons. ( exemple : on ne doit pas mettre
+    // paiement à la livraison en premier ).
+    if (!$payment_gateway_id)
+      return true;
     return in_array($payment_gateway_id, $this->configuration['payment_gateways']);
   }
   

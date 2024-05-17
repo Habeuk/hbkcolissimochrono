@@ -40,6 +40,7 @@ $svg_edit: '<svg xmlns="http://www.w3.org/2000/svg" fill="#{$wbu-background}" wi
     top: 0;
     right: 0;
     text-indent: 900px;
+    z-index: 3;
   }
   &:hover {
     .pickup-html::before {

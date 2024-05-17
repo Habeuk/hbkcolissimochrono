@@ -41,6 +41,9 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
         'id' => 'hbkcolissimochrono_pickup-container'
       ]
     ];
+    /**
+     * Afficher la map colissimo et recuperer les données du pickup.
+     */
     if (!empty($pane_form['shipments'][0]['#shipment'])) {
       /**
        *
@@ -153,10 +156,12 @@ class ShippingInformationHbkcolissimochrono extends ShippingInformation {
        */
       $commerce_shipping_method = $shipment->getShippingMethod();
       if (isset($commerce_shipping_method)) {
-        $commerce_shipping_method->applies($shipment);
+        if (!$commerce_shipping_method->applies($shipment)) {
+          self::ajaxRefreshForm($form, $form_state);
+          $form_state->setError($element, "La methode de paiement n'est pas autorisé");
+        }
       }
     }
-    // dd($element);
   }
   
   static public function hbkcolissimochrono_pickup_book_validate(&$element, FormStateInterface $form_state, $form) {

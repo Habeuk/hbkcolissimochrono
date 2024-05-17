@@ -30,7 +30,8 @@ class HbkcolissimochronoAjax {
          * @var \Drupal\hbkcolissimochrono\Plugin\Commerce\ShippingMethod\HbkChronoPost $plugin
          */
         $plugin = $ShippingMethod->getPlugin();
-        $open_map = $plugin->isRelay();
+        if ($plugin instanceof \Drupal\hbkcolissimochrono\Plugin\Commerce\ShippingMethod\HbkShippingInterface)
+          $open_map = $plugin->isRelay();
       }
       if ($open_map) {
         $arguments = [
@@ -67,7 +68,9 @@ class HbkcolissimochronoAjax {
            * @var \Drupal\profile\Entity\Profile $profile
            */
           $profile = $inline_form->getEntity();
-          $arguments['address'] = reset($profile->get('address')->getValue());
+          $address = $profile->get('address')->first();
+          if ($address)
+            $arguments['address'] = $address->getValue();
         }
         // add custom js.
         if (!$arguments['address']) {
