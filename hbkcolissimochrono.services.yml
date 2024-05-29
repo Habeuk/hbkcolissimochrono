@@ -1,17 +1,28 @@
 services:
   logger.hbkcolissimochrono:
     parent: logger.channel_base
-    arguments: ['hbkcolissimochrono']
+    arguments: ["hbkcolissimochrono"]
   hbkcolissimochrono.default_settings:
     class: Drupal\hbkcolissimochrono\Services\ColissimoDefaultSettings
     arguments: []
   hbkcolissimochrono.api.param:
     class: Drupal\hbkcolissimochrono\Services\Api\ParamColissimo
-    arguments: ['@config.factory','@messenger']
+    arguments: ["@hbkcolissimochrono.default_settings", "@messenger"]
   hbkcolissimochrono.api.rest_client:
     class: Drupal\hbkcolissimochrono\Services\Api\RestClient
-    arguments: ['@http_client','@logger.hbkcolissimochrono','@hbkcolissimochrono.api.param','@messenger']
+    arguments:
+      [
+        "@http_client",
+        "@logger.hbkcolissimochrono",
+        "@hbkcolissimochrono.api.param",
+        "@messenger",
+      ]
   hbkcolissimochrono.api.sls:
     class: Drupal\hbkcolissimochrono\Services\Api\Ressources\SLS
-    arguments: ['@hbkcolissimochrono.api.rest_client','@hbkcolissimochrono.api.param','@logger.hbkcolissimochrono','@messenger']
-  
+    arguments:
+      [
+        "@hbkcolissimochrono.api.rest_client",
+        "@hbkcolissimochrono.api.param",
+        "@logger.hbkcolissimochrono",
+        "@messenger",
+      ]

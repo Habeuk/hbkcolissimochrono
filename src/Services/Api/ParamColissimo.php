@@ -2,8 +2,8 @@
 
 namespace Drupal\hbkcolissimochrono\Services\Api;
 
-use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Messenger\Messenger;
+use Drupal\hbkcolissimochrono\Services\ColissimoDefaultSettings;
 
 /**
  *
@@ -20,36 +20,32 @@ class ParamColissimo implements ParamInterface {
   protected string $CommercialName;
   protected float $DefaultParcelWeigthInKg = 0.01;
   protected string $LabelSenserIdSource = 'ORDER_ID';
-  protected ConfigFactory $ConfigFactory;
+  protected ColissimoDefaultSettings $ConfigFactory;
   protected Messenger $Messenger;
-  
-  public function __construct(ConfigFactory $ConfigFactory, Messenger $Messenger) {
+
+  public function __construct(ColissimoDefaultSettings $ConfigFactory, Messenger $Messenger) {
     $this->ConfigFactory = $ConfigFactory;
     $this->Messenger = $Messenger;
     $this->setDefaultConfiguration();
   }
-  
+
   /**
    * Definit le configuration par defaut.
    */
   protected function setDefaultConfiguration() {
-    $config = $this->ConfigFactory->get('hbkcolissimochrono.settings');
-    if ($config->get('login'))
+    $config = $this->ConfigFactory->getSettings();
+    if (isset($config['login']))
       $this->userLogin = $config->get('login');
     else
       $this->Messenger->addError("Paramettre coliShip non definit");
-    if ($config->get('password'))
-      $this->userPassword = $config->get('password');
-    if ($config->get('size'))
-      $this->size = $config->get('size');
-    if ($config->get('format'))
-      $this->format = $config->get('format');
-    if ($config->get('delais_in_days'))
-      $this->delayInDays = $config->get('delais_in_days');
-    if ($config->get('commercial_name'))
-      $this->CommercialName = $config->get('commercial_name');
+
+    $this->userPassword = $config["password"] ?? NULL;
+    $this->size = $config["size"] ?? NULL;
+    $this->format = $config["format"] ?? NULL;
+    $this->delayInDays = $config["delais_in_days"] ?? NULL;
+    $this->CommercialName = $config['commercial_name'] ?? NULL;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -58,7 +54,7 @@ class ParamColissimo implements ParamInterface {
   public function getBaseUrl(): string {
     return $this->baseUrl;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -67,7 +63,7 @@ class ParamColissimo implements ParamInterface {
   public function getUserLogin(): string {
     return $this->userLogin;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -76,7 +72,7 @@ class ParamColissimo implements ParamInterface {
   public function getPassWord(): string {
     return $this->userPassword;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -85,7 +81,7 @@ class ParamColissimo implements ParamInterface {
   public function getSize(): string {
     return $this->size;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -94,7 +90,7 @@ class ParamColissimo implements ParamInterface {
   public function getFormat(): string {
     return $this->format;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -103,11 +99,11 @@ class ParamColissimo implements ParamInterface {
   public function getAveragePreparationDelayInDays(): int {
     return $this->delayInDays;
   }
-  
+
   public function getCommercialName(): string {
     return $this->CommercialName;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -116,7 +112,7 @@ class ParamColissimo implements ParamInterface {
   public function getDefaultParcelWeigthInKg(): float {
     return $this->DefaultParcelWeigthInKg;
   }
-  
+
   /**
    *
    * {@inheritdoc}
@@ -125,5 +121,4 @@ class ParamColissimo implements ParamInterface {
   public function getLabelSenserIdSource(): string {
     return $this->LabelSenserIdSource;
   }
-  
 }
