@@ -30,10 +30,10 @@ class ColissimoDefaultSettings {
   public function getWidgetAuthenticationToken() {
     /**
      *
-     * @var \Drupal\Core\Cache\ApcuBackend $cacheApcu
+     * @var \Drupal\Core\Cache\ApcuBackend $cache
      */
-    $cacheApcu = \Drupal::service("cache.backend.database")->get('hbkcolissimochrono_widget_api_cache');
-    $token = $cacheApcu->get('token');
+    $cache = \Drupal::service("cache.backend.database")->get('hbkcolissimochrono_widget_api_cache');
+    $token = $cache->get('token');
     if ($token) {
       return $token->data;
     }
@@ -62,7 +62,7 @@ class ColissimoDefaultSettings {
       $response = $httpClient->post("https://ws.colissimo.fr/widget-colissimo/rest/authenticate.rest", $options);
       $data = Json::decode($response->getBody()->getContents());
       if (!empty($data['token'])) {
-        $cacheApcu->set('token', $data['token'], time() + 15 * 60);
+        $cache->set('token', $data['token'], time() + 15 * 60);
         return $data['token'];
       }
       else {
