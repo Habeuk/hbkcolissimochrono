@@ -3,6 +3,7 @@
 namespace Drupal\hbkcolissimochrono\Services;
 
 use Drupal\Component\Serialization\Json;
+use GuzzleHttp\RequestOptions;
 
 /**
  * --
@@ -31,36 +32,47 @@ class ColissimoDefaultSettings {
      *
      * @var \Drupal\Core\Cache\ApcuBackend $cacheApcu
      */
-    $cacheApcu = \Drupal::service("cache.backend.apcu")->get('hbkcolissimochrono_widget_api_cache');
+    $cacheApcu = \Drupal::service("cache.backend.database")->get('hbkcolissimochrono_widget_api_cache');
     $token = $cacheApcu->get('token');
     if ($token) {
       return $token->data;
     }
     try {
       $config = $this->getSettings();
+      $options = [
+        RequestOptions::HEADERS => [
+          'Content-Type' => 'application/json',
+          'Accept' => 'application/json'
+        ]
+      ];
       /**
        *
        * @var \GuzzleHttp\Client $httpClient
        */
       $httpClient = \Drupal::httpClient();
+      $payload = [
+        "login" => $config['login'] ?? "",
+        "password" => $config['password'] ?? ""
+      ];
+      $options[RequestOptions::BODY] = json_encode($payload);
       /**
        *
        * @var \Psr\Http\Message\ResponseInterface $response
        */
-      $response = $httpClient->post("https://ws.colissimo.fr/widget-colissimo/rest/authenticate.rest", [
-        'form_params' => [
-          "login" => $config['login'] ?? "",
-          "password" => $config['password'] ?? ""
-        ]
-      ]);
+      $response = $httpClient->post("https://ws.colissimo.fr/widget-colissimo/rest/authenticate.rest", $options);
       $data = Json::decode($response->getBody()->getContents());
-      if (isset($data['token'])) {
+      if (!empty($data['token'])) {
         $cacheApcu->set('token', $data['token'], time() + 15 * 60);
         return $data['token'];
       }
+      else {
+        \Drupal::messenger()->addWarning("Erreur de formatage sur colisship.");
+        $error = !empty($data['erreur']) ? $data['erreur'] : '';
+        \Drupal::logger('hbkcolissimochrono')->error("Erreur de formatage sur colisship : " . $error);
+      }
     }
     catch (\Exception $e) {
-      // dump($e);
+      \Drupal::logger('hbkcolissimochrono')->error("Erreur d'authentification sur colisship.");
       \Drupal::messenger()->addWarning("Erreur d'authentification sur colisship.");
     }
     return false;
