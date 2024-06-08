@@ -66,7 +66,6 @@ class ShippingFilterByPayment extends ConditionBase {
    */
   public function evaluate(EntityInterface $entity) {
     $this->assertEntity($entity);
-    // return true;
     
     /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
     $order = $entity;
@@ -88,5 +87,4 @@ class ShippingFilterByPayment extends ConditionBase {
       return true;
     return in_array($payment_gateway_id, $this->configuration['payment_gateways']);
   }
-  
 }
