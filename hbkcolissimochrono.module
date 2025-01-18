@@ -21,18 +21,19 @@ function hbkcolissimochrono_entity_base_field_info(EntityTypeInterface $entity_t
     /**
      * Pour sauvegarder les données colissimo.
      */
-    $fields["hbkcolissimochrono_pickup"] = BaseFieldDefinition::create('text_long')->setLabel(" Colissimo pickup ")->setDisplayOptions('form', [])->setDisplayOptions('view', [
-      'label' => 'hidden',
-      'type' => 'hbkcoliickup_formatter',
-      'weight' => 0
-    ])->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', true);
+    $fields["hbkcolissimochrono_pickup"] = BaseFieldDefinition::create('text_long')->setLabel(" Colissimo pickup ")->setDisplayOptions('form', [])->setDisplayOptions('view',
+      [
+        'label' => 'hidden',
+        'type' => 'hbkcoliickup_formatter',
+        'weight' => 0
+      ])->setDisplayConfigurable('view', TRUE)->setDisplayConfigurable('form', true);
   }
   return $fields;
 }
 
 /**
  * implement hook_commerce_checkout_pane_info_alter
- * ( cela permet de remplacer les classes par defaut ).
+ * ( Cela permet de remplacer les classes par defaut ).
  */
 function hbkcolissimochrono_commerce_checkout_pane_info_alter(&$definitions) {
   if (!empty($definitions['shipping_information']['class']) && $definitions['shipping_information']['provider'] == 'commerce_shipping') {
