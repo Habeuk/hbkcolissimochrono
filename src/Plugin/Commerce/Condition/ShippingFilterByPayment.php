@@ -59,7 +59,8 @@ class ShippingFilterByPayment extends ConditionBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
     $values = $form_state->getValue($form['#parents']);
-    $this->configuration['payment_gateways'] = $values['payment_gateways'];
+    if (isset($values['payment_gateways']))
+      $this->configuration['payment_gateways'] = $values['payment_gateways'];
   }
   
   /**
