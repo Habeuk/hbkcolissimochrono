@@ -85,14 +85,16 @@ final class SettingsForm extends ConfigFormBase {
       ]
     ];
     $form['delais_in_days'] = [
-      '#type' => 'textfield',
+      '#type' => 'number',
       '#title' => $this->t("Delais in days"),
-      '#default_value' => $config->get('delais_in_days')
+      '#default_value' => $config->get('delais_in_days'),
+      '#required' => true
     ];
     $form['commercial_name'] = [
       '#type' => 'textfield',
       '#title' => $this->t("Commercial name"),
-      '#default_value' => $config->get('commercial_name')
+      '#default_value' => $config->get('commercial_name'),
+      '#required' => true
     ];
     return parent::buildForm($form, $form_state);
   }
@@ -114,5 +116,4 @@ final class SettingsForm extends ConfigFormBase {
     $config->save();
     parent::submitForm($form, $form_state);
   }
-  
 }

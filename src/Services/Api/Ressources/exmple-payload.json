@@ -1,0 +1,34 @@
+{
+    "contractNumber": "1234567890",
+    "password": "votreMotDePasse",
+    "outputFormat": "PDF",
+    "letter": {
+        "service": {
+            "productCode": "DOM",
+            "depositDate": "2025-01-24",
+            "commercialName": "VotreNomCommercial"
+        },
+        "parcel": {
+            "weight": 1.5
+        },
+        "sender": {
+            "address": {
+                "companyName": "VotreEntreprise",
+                "line2": "Adresse Ligne 2",
+                "countryCode": "FR"
+            }
+        },
+        "addressee": {
+            "address": {
+                "lastName": "NomDestinataire",
+                "firstName": "PrénomDestinataire",
+                "line2": "Adresse Ligne 2",
+                "countryCode": "FR",
+                "city": "Ville",
+                "zipCode": "75001"
+            },
+            "codeBarForReference": "1234567890123",
+            "pickupLocationId": "123456"
+        }
+    }
+}

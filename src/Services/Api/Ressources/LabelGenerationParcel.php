@@ -12,11 +12,18 @@ class LabelGenerationParcel {
    * @var float
    */
   public $weight;
+  
   /**
    * Pickup location id.
    *
    * @var string
    */
-  public $pickupLocationId;
+  public string|int $pickupLocationId;
   
+  /**
+   * Instruction de livraison pour le livreur
+   *
+   * @var string
+   */
+  public string $instructions;
 }

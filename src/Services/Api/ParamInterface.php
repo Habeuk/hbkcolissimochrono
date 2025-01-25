@@ -68,4 +68,10 @@ interface ParamInterface {
    */
   public function getLabelSenserIdSource(): string;
   
+  /**
+   * Permet de terminer si on est en production ou pas.
+   *
+   * @return string
+   */
+  public function runInProduction(): bool;
 }

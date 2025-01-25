@@ -70,23 +70,41 @@ class RestClient {
    */
   public function post($path, $payload) {
     try {
-      $url = $this->Param->getBaseUrl() . $path;
+      if (str_contains($path, "https://"))
+        $url = $path;
+      else
+        $url = $this->Param->getBaseUrl() . $path;
       $options = [
         RequestOptions::HEADERS => [
           'Content-Type' => 'application/json'
         ]
       ];
       $payload = $this->normalize($payload);
+      // ($payload);
       $payload['contractNumber'] = $this->Param->getUserLogin();
       $payload['password'] = $this->Param->getPassWord();
+      \Stephane888\Debug\debugLog::symfonyDebug($payload, 'generateLabel_PAYLOAD__', true);
       //
       $options[RequestOptions::BODY] = $this->serializer->serialize($payload, 'json');
       $httpResponse = $this->httpClient->request('POST', $url, $options);
+      \Stephane888\Debug\debugLog::kintDebugDrupal($httpResponse, 'RestClient__post', true);
       return $httpResponse->getBody()->getContents();
+    }
+    catch (\GuzzleHttp\Exception\ClientException $e) {
+      $debugs = [
+        'code' => $e->getCode(),
+        'message' => $e->getMessage(),
+        'Response' => $e->getResponse(),
+        'ResponseBody' => $e->getResponse()->getBody()->getContents()
+      ];
+      \Stephane888\Debug\debugLog::$max_depth = 10;
+      \Stephane888\Debug\debugLog::kintDebugDrupal($debugs, 'RestClient__post_error__', true);
+      $this->logger->error($e->getMessage());
     }
     catch (\Exception $e) {
       $this->Messenger->addError($e->getMessage());
-      $this->logger->error(ExceptionExtractMessage::errorAll($e));
+      \Stephane888\Debug\debugLog::kintDebugDrupal(ExceptionExtractMessage::errorAll($e), 'RestClient__post_error__', true);
+      $this->logger->error(ExceptionExtractMessage::errorAllToString($e));
     }
   }
   
@@ -99,5 +117,4 @@ class RestClient {
     }
     return $this->serializer->normalize($object);
   }
-  
 }

@@ -7,7 +7,7 @@ hbkcolissimochrono.settings:
     _permission: 'administer site configuration'
 
 hbkcolissimochrono.manuel_export_shipping:
-  path: '/admin/commerce/hbkcolissimochrono/manuel-export-shipping'
+  path: '/admin/commerce/hbkcolissimochrono/manuel-export-shipping/{order_id}'
   defaults:
     _title: 'manuel export shipping'
     _controller: '\Drupal\hbkcolissimochrono\Controller\HbkcolissimochronoController'

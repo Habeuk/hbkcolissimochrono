@@ -31,4 +31,9 @@ class LabelGenerationLetter {
    */
   public LabelGenerationAddressee $addressee;
   
+  /**
+   *
+   * @var string
+   */
+  public string $pickupLocationId;
 }

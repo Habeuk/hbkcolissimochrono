@@ -28,12 +28,23 @@ final class HbkcolissimochronoController extends ControllerBase {
   /**
    * Builds the response.
    */
-  public function __invoke(): array {
+  public function __invoke($order_id): array {
+    $Order = \Drupal\commerce_order\Entity\Order::load($order_id);
+    if ($Order) {
+      $name_field_shipments = "shipments";
+      
+      if ($Order->hasField($name_field_shipments)) {
+        $shipment_id = $Order->get($name_field_shipments)->target_id;
+        $shipment = \Drupal\commerce_shipping\Entity\Shipment::load($shipment_id);
+        $results = $this->SLS->checkGenerateLabel($shipment);
+        dd($results);
+      }
+    }
+    
     $build['content'] = [
       '#type' => 'item',
       '#markup' => $this->t('It works!')
     ];
     return $build;
   }
-  
 }

@@ -23,6 +23,5 @@ class LabelGenerationService {
    *
    * @var string
    */
-  public $commercialName;
-  
+  public string $commercialName;
 }
