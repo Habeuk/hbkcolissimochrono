@@ -59,6 +59,12 @@ class SLS_ressources {
     $result = $this->RestClient->post("https://ws.colissimo.fr/sandbox/api-document/rest/documents", $payload);
   }
   
+  public function testTraitementDeReccource(ShipmentInterface $shipment) {
+    $body = file_get_contents("/siteweb/wbhorizon/docs/raw_body_content803");
+    $MultiPartBody = new MultiPartBody();
+    return $MultiPartBody->parseMultiPartBody($body);
+  }
+  
   /**
    * Build letter.
    *

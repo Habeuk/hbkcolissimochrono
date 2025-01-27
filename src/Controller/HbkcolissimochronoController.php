@@ -38,7 +38,7 @@ final class HbkcolissimochronoController extends ControllerBase {
         $shipment = \Drupal\commerce_shipping\Entity\Shipment::load($shipment_id);
         // $results = $this->SLS->generateLabel($shipment);
         // $results = $this->SLS->testDocuments($shipment);
-        $results = $this->SLS->checkGenerateLabel($shipment);
+        $results = $this->SLS->testTraitementDeReccource($shipment);
         dd($results);
       }
     }

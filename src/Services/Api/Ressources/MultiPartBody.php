@@ -11,6 +11,10 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Drupal\hbkcolissimochrono\Services\Api\Ressources\LabelGenerationResponse;
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\File\FileExists;
+use Drupal\file\Entity\File;
 
 /**
  * Traitement de la reponse.
@@ -112,18 +116,43 @@ class MultiPartBody {
         if ($responseClass) {
           // $parsedData = $this->serializer->deserialize($body, $responseClass,
           // 'json');
-          $parsedData = $body;
+          $parsedData = Json::decode($body);
         }
       }
       else {
         $files[] = $body;
       }
     }
-    
+    $this->savefiles($files);
     return [
       'datas' => $parsedData,
       'files' => $files
     ];
+  }
+  
+  /**
+   *
+   * @param array $files
+   */
+  private function savefiles(array $files) {
+    $destination = "public://colissimo_files/";
+    /**
+     *
+     * @var \Drupal\Core\File\FileSystem $filesystem
+     */
+    $filesystem = \Drupal::service('file_system');
+    // Check the directory exists before writing data to it.
+    if ($filesystem->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS))
+      foreach ($files as $data) {
+        $filename = "file-" . rand(10, 2000) . ".pdf";
+        $newUri = $filesystem->saveData($data, $destination . $filename, FileExists::Replace);
+        $file = File::create([
+          'uri' => $newUri,
+          'filename' => $filename
+        ]);
+        $file->setPermanent();
+        $file->save();
+      }
   }
   
   /**
