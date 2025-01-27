@@ -3,6 +3,7 @@
 namespace Drupal\hbkcolissimochrono\Services\Api\Ressources;
 
 /**
+ * Destinataire
  * Label generation addressee.
  */
 class LabelGenerationAddressee {
@@ -17,12 +18,11 @@ class LabelGenerationAddressee {
    *
    * @var bool
    */
-  public $codeBarForReference;
+  public bool $codeBarForReference = false;
   /**
    * Address.
    *
    * @var \Drupal\hbkcolissimochrono\Services\Api\Ressources\LabelGenerationAddress
    */
   public LabelGenerationAddress $address;
-  
 }

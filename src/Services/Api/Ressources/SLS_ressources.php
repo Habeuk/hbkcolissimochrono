@@ -57,7 +57,6 @@ class SLS_ressources {
   public function testDocuments(ShipmentInterface $shipment) {
     $payload = new LabelGenerationPayload();
     $result = $this->RestClient->post("https://ws.colissimo.fr/sandbox/api-document/rest/documents", $payload);
-    dd($result);
   }
   
   /**
@@ -119,8 +118,17 @@ class SLS_ressources {
       assert($address instanceof AddressInterface);
       $addressee->address = $this->buildAddress($address);
     }
+    $addressee->addresseeParcelRef = $shipment->getOrder()->id();
     $addressee->address->email = $shipment->getOrder()->getEmail();
-    
+    $bilingProdile = $shipment->getOrder()->getBillingProfile();
+    // On doit trouver un moyen de regler cela proprement.
+    // Cette information doit etre dans le shipping.
+    // OUps cest pas ICI.
+    if ($bilingProdile->hasField('field_telephone')) {
+      $addressee->address->phoneNumber = $bilingProdile->get('field_telephone')->value;
+      $addressee->address->mobileNumber = $bilingProdile->get('field_telephone')->value;
+    }
+    // ////////////////////////////////////////////
     // $setting = $this->settings->get();
     // if (!$setting->isPhoneFromBillingProfile()) {
     // $phoneNumber = new
@@ -204,13 +212,6 @@ class SLS_ressources {
     $sender->address = $this->buildAddress($store->getAddress());
     $sender->address->companyName = $store->getName();
     $sender->address->email = $store->getEmail();
-    $bilingProdile = $shipment->getOrder()->getBillingProfile();
-    // On doit trouver un moyen de regler cela proprement.
-    // cette information doit etre dans le shipping.
-    // OUps cest pas ICI.
-    if ($bilingProdile->hasField('field_telephone')) {
-      $sender->address->phoneNumber = $bilingProdile->get('field_telephone')->value;
-    }
     return $sender;
   }
   

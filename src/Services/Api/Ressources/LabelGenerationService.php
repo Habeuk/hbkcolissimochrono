@@ -3,6 +3,7 @@
 namespace Drupal\hbkcolissimochrono\Services\Api\Ressources;
 
 /**
+ * Type de produit et tarifs
  * Label generation service.
  */
 class LabelGenerationService {

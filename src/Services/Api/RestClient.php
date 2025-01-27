@@ -13,6 +13,7 @@ use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use GuzzleHttp\RequestOptions;
 use Stephane888\Debug\ExceptionExtractMessage;
 use Drupal\Core\Messenger\Messenger;
+use Drupal\hbkcolissimochrono\Services\Api\Ressources\MultiPartBody;
 
 /**
  *
@@ -20,6 +21,11 @@ use Drupal\Core\Messenger\Messenger;
  *        
  */
 class RestClient {
+  /**
+   *
+   * @var \Drupal\Core\Extension\ExtensionPathResolver
+   */
+  protected static $pathResolver;
   /**
    * HTTP client.
    */
@@ -79,16 +85,38 @@ class RestClient {
           'Content-Type' => 'application/json'
         ]
       ];
+      \Stephane888\Debug\debugLog::$max_depth = 10;
       $payload = $this->normalize($payload);
-      // ($payload);
+      // dd($payload);
       $payload['contractNumber'] = $this->Param->getUserLogin();
       $payload['password'] = $this->Param->getPassWord();
       \Stephane888\Debug\debugLog::symfonyDebug($payload, 'generateLabel_PAYLOAD__', true);
       //
       $options[RequestOptions::BODY] = $this->serializer->serialize($payload, 'json');
+      /**
+       *
+       * @var \Psr\Http\Message\ResponseInterface $httpResponse
+       */
       $httpResponse = $this->httpClient->request('POST', $url, $options);
-      \Stephane888\Debug\debugLog::kintDebugDrupal($httpResponse, 'RestClient__post', true);
-      return $httpResponse->getBody()->getContents();
+      $bodyContens = $httpResponse->getBody()->getContents();
+      $data = [
+        'body' => $bodyContens,
+        'httpResponse' => $httpResponse
+      ];
+      \Stephane888\Debug\debugLog::symfonyDebug($data, 'RestClient__post', true);
+      $MultiPartBody = new MultiPartBody();
+      //
+      $datas = $MultiPartBody->getDatas($httpResponse);
+      \Stephane888\Debug\debugLog::kintDebugDrupal($datas, 'getDatas', true);
+      //
+      $defaultThemeName = \Drupal::config('system.theme')->get('default');
+      $path_of_module = DRUPAL_ROOT . '/' . self::getPath('theme', $defaultThemeName) . "/logs";
+      \Stephane888\Debug\debugLog::logger($bodyContens, 'raw_body_content', true, 'file', $path_of_module);
+      //
+      $parseMultiPartBody = $MultiPartBody->parseMultiPartBody($bodyContens);
+      \Stephane888\Debug\debugLog::kintDebugDrupal($parseMultiPartBody, 'parseMultiPartBody', true);
+      //
+      return $bodyContens;
     }
     catch (\GuzzleHttp\Exception\ClientException $e) {
       $debugs = [
@@ -116,5 +144,12 @@ class RestClient {
       return [];
     }
     return $this->serializer->normalize($object);
+  }
+  
+  public static function getPath($type, $name) {
+    if (!self::$pathResolver) {
+      self::$pathResolver = \Drupal::service('extension.path.resolver');
+    }
+    return self::$pathResolver->getPath($type, $name);
   }
 }

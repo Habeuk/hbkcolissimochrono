@@ -38,7 +38,8 @@ class ParamColissimo implements ParamInterface {
       $this->userLogin = $config['login'];
     else
       $this->Messenger->addError("Paramettre coliShip non definit");
-    
+    //
+    $this->environnement = $config['app_mode'];
     $this->userPassword = $config["password"] ?? NULL;
     $this->size = $config["size"] ?? NULL;
     $this->format = $config["format"] ?? NULL;

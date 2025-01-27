@@ -3,6 +3,7 @@
 namespace Drupal\hbkcolissimochrono\Services\Api\Ressources;
 
 /**
+ * Expéditeur ou déposant en retour
  * Label generation sender.
  */
 class LabelGenerationSender {
@@ -18,5 +19,4 @@ class LabelGenerationSender {
    * @var \Drupal\hbkcolissimochrono\Services\Api\Ressources\LabelGenerationAddress
    */
   public LabelGenerationAddress $address;
-  
 }

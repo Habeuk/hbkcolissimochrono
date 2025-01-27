@@ -3,6 +3,7 @@
 namespace Drupal\hbkcolissimochrono\Services\Api\Ressources;
 
 /**
+ * Assurances et options
  * Label generation parcel.
  */
 class LabelGenerationParcel {
