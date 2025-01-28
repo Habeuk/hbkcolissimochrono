@@ -1,5 +1,13 @@
+
+hbketiquetecolisimo.generate_shipping:
+  route_name: hbkcolissimochrono.manuel_export_shipping
+  title: 'Generate the label on ColisShip'
+  appears_on:
+    - entity.commerce_order.canonical
+
 hbketiquetecolisimo.add_form:
   title: 'Add etiquette colissimo'
   route_name: entity.hbketiquetecolisimo.add_form
   appears_on:
     - entity.hbketiquetecolisimo.collection
+

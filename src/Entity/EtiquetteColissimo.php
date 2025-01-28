@@ -118,7 +118,7 @@ final class EtiquetteColissimo extends RevisionableContentEntityBase implements 
     ])->setSetting("handler", "default")->setSetting("target_type", "commerce_order")->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
     
     // Champ pour le fichier.
-    $fields['files'] = BaseFieldDefinition::create('file')->setLabel(t('Files'))->setDescription(t('Contains the generated Colissimo labels'))->setSettings(
+    $fields['files'] = BaseFieldDefinition::create('file')->setLabel(t('Contains the generated Colissimo labels'))->setSettings(
       [
         'file_directory' => 'colissimo_labels',
         'file_extensions' => 'pdf txt png'
@@ -131,6 +131,18 @@ final class EtiquetteColissimo extends RevisionableContentEntityBase implements 
       'type' => 'file_default',
       'weight' => 0
     ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
+    
+    $fields['metadatas'] = BaseFieldDefinition::create('text_long')->setLabel(" Description ")->setSettings([
+      'text_processing' => 0
+      // 'html_format' => "text_code"
+    ])->setDisplayConfigurable('form', true)->setDisplayConfigurable('view', TRUE)->setDisplayOptions('form', [
+      'type' => 'text_textarea',
+      'weight' => 0
+    ])->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'text_default',
+      'weight' => 0
+    ])->setTranslatable(TRUE);
     
     $fields['status'] = BaseFieldDefinition::create('boolean')->setRevisionable(TRUE)->setLabel(t('Status'))->setDefaultValue(TRUE)->setSetting('on_label', 'Enabled')->setDisplayOptions('form',
       [

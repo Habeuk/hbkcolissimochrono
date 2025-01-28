@@ -85,12 +85,13 @@ class RestClient {
           'Content-Type' => 'application/json'
         ]
       ];
-      \Stephane888\Debug\debugLog::$max_depth = 10;
+      // \Stephane888\Debug\debugLog::$max_depth = 10;
       $payload = $this->normalize($payload);
       // dd($payload);
       $payload['contractNumber'] = $this->Param->getUserLogin();
       $payload['password'] = $this->Param->getPassWord();
-      \Stephane888\Debug\debugLog::symfonyDebug($payload, 'generateLabel_PAYLOAD__', true);
+      // \Stephane888\Debug\debugLog::symfonyDebug($payload,
+      // 'generateLabel_PAYLOAD__', true);
       //
       $options[RequestOptions::BODY] = $this->serializer->serialize($payload, 'json');
       /**
@@ -98,23 +99,29 @@ class RestClient {
        * @var \Psr\Http\Message\ResponseInterface $httpResponse
        */
       $httpResponse = $this->httpClient->request('POST', $url, $options);
-      $bodyContens = $httpResponse->getBody()->getContents();
+      $bodyContens = [
+        'raw_body' => $httpResponse->getBody()->getContents()
+      ];
       $data = [
         'body' => $bodyContens,
         'httpResponse' => $httpResponse
       ];
-      \Stephane888\Debug\debugLog::symfonyDebug($data, 'RestClient__post', true);
+      // \Stephane888\Debug\debugLog::symfonyDebug($data, 'RestClient__post',
+      // true);
       $MultiPartBody = new MultiPartBody();
       //
-      $datas = $MultiPartBody->getDatas($httpResponse);
-      \Stephane888\Debug\debugLog::kintDebugDrupal($datas, 'getDatas', true);
+      // $datas = $MultiPartBody->getDatas($httpResponse);
+      // \Stephane888\Debug\debugLog::kintDebugDrupal($datas, 'getDatas', true);
       //
-      $defaultThemeName = \Drupal::config('system.theme')->get('default');
-      $path_of_module = DRUPAL_ROOT . '/' . self::getPath('theme', $defaultThemeName) . "/logs";
-      \Stephane888\Debug\debugLog::logger($bodyContens, 'raw_body_content', true, 'file', $path_of_module);
+      // $defaultThemeName = \Drupal::config('system.theme')->get('default');
+      // $path_of_module = DRUPAL_ROOT . '/' . self::getPath('theme',
+      // $defaultThemeName) . "/logs";
+      // \Stephane888\Debug\debugLog::logger($bodyContens, 'raw_body_content',
+      // true, 'file', $path_of_module);
       //
-      $parseMultiPartBody = $MultiPartBody->parseMultiPartBody($bodyContens);
-      \Stephane888\Debug\debugLog::kintDebugDrupal($parseMultiPartBody, 'parseMultiPartBody', true);
+      $bodyContens += $MultiPartBody->parseMultiPartBody($bodyContens['raw_body']);
+      // \Stephane888\Debug\debugLog::kintDebugDrupal($parseMultiPartBody,
+      // 'parseMultiPartBody', true);
       //
       return $bodyContens;
     }
@@ -122,7 +129,6 @@ class RestClient {
       $debugs = [
         'code' => $e->getCode(),
         'message' => $e->getMessage(),
-        'Response' => $e->getResponse(),
         'ResponseBody' => $e->getResponse()->getBody()->getContents()
       ];
       \Stephane888\Debug\debugLog::$max_depth = 10;

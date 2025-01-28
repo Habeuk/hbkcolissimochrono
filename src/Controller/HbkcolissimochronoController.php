@@ -28,18 +28,25 @@ final class HbkcolissimochronoController extends ControllerBase {
   /**
    * Builds the response.
    */
-  public function __invoke($order_id): array {
-    $Order = \Drupal\commerce_order\Entity\Order::load($order_id);
+  public function __invoke($commerce_order) {
+    $Order = \Drupal\commerce_order\Entity\Order::load($commerce_order);
     if ($Order) {
       $name_field_shipments = "shipments";
       
       if ($Order->hasField($name_field_shipments)) {
         $shipment_id = $Order->get($name_field_shipments)->target_id;
         $shipment = \Drupal\commerce_shipping\Entity\Shipment::load($shipment_id);
-        // $results = $this->SLS->generateLabel($shipment);
+        /**
+         *
+         * @var \Drupal\hbkcolissimochrono\Entity\EtiquetteColissimo $EtiquetteColissimo
+         */
+        $EtiquetteColissimo = $this->SLS->generateLabel($shipment);
         // $results = $this->SLS->testDocuments($shipment);
-        $results = $this->SLS->testTraitementDeReccource($shipment);
-        dd($results);
+        // $results = $this->SLS->testTraitementDeReccource($shipment);
+        if ($EtiquetteColissimo instanceof \Drupal\hbkcolissimochrono\Entity\EtiquetteColissimo)
+          return $this->redirect("entity.hbketiquetecolisimo.canonical", [
+            'hbketiquetecolisimo' => $EtiquetteColissimo->id()
+          ]);
       }
     }
     
