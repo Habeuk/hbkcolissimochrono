@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - hbkcolissimochrono
+id: hbketiquetecolisimo_delete_action
+label: 'Delete etiquette colissimos'
+type: hbketiquetecolisimo
+plugin: entity:delete_action:hbketiquetecolisimo
+configuration: {  }

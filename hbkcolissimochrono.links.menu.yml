@@ -5,3 +5,14 @@ hbkcolissimochrono.settings:
   weight: 10
 
   
+entity.hbketiquetecolisimo.settings:
+  title: 'Etiquette colissimo'
+  description: 'Configure an Etiquette colissimo entity type.'
+  route_name:  entity.hbketiquetecolisimo.settings
+  parent: system.admin_structure
+
+entity.hbketiquetecolisimo.collection:
+  title: 'Etiquette colissimos'
+  description: 'List of etiquette colissimos.'
+  route_name: entity.hbketiquetecolisimo.collection
+  parent: system.admin_content

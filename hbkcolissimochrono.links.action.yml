@@ -1,0 +1,5 @@
+hbketiquetecolisimo.add_form:
+  title: 'Add etiquette colissimo'
+  route_name: entity.hbketiquetecolisimo.add_form
+  appears_on:
+    - entity.hbketiquetecolisimo.collection

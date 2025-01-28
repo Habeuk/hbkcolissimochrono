@@ -13,3 +13,11 @@ hbkcolissimochrono.manuel_export_shipping:
     _controller: '\Drupal\hbkcolissimochrono\Controller\HbkcolissimochronoController'
   requirements:
     _permission: 'access content'
+
+entity.hbketiquetecolisimo.settings:
+  path: 'admin/structure/hbketiquetecolisimo'
+  defaults:
+    _form: '\Drupal\hbkcolissimochrono\Form\EtiquetteColissimoSettingsForm'
+    _title: 'Etiquette colissimo'
+  requirements:
+    _permission: 'administer hbketiquetecolisimo'

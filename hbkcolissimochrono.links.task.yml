@@ -1,0 +1,22 @@
+entity.hbketiquetecolisimo.settings:
+  title: 'Settings'
+  route_name: entity.hbketiquetecolisimo.settings
+  base_route: entity.hbketiquetecolisimo.settings
+entity.hbketiquetecolisimo.view:
+  title: 'View'
+  route_name: entity.hbketiquetecolisimo.canonical
+  base_route: entity.hbketiquetecolisimo.canonical
+entity.hbketiquetecolisimo.edit_form:
+  title: 'Edit'
+  route_name: entity.hbketiquetecolisimo.edit_form
+  base_route: entity.hbketiquetecolisimo.canonical
+entity.hbketiquetecolisimo.delete_form:
+  title: 'Delete'
+  route_name: entity.hbketiquetecolisimo.delete_form
+  base_route: entity.hbketiquetecolisimo.canonical
+  weight: 10
+entity.hbketiquetecolisimo.collection:
+  title: 'Etiquette colissimos'
+  route_name: entity.hbketiquetecolisimo.collection
+  base_route: system.admin_content
+  weight: 10

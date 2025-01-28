@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - hbkcolissimochrono
+id: hbketiquetecolisimo_save_action
+label: 'Save etiquette colissimos'
+type: hbketiquetecolisimo
+plugin: entity:save_action:hbketiquetecolisimo
+configuration: {  }

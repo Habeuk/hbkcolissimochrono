@@ -1,0 +1,10 @@
+entity.hbketiquetecolisimo.edit_form:
+  route_name: entity.hbketiquetecolisimo.edit_form
+  group: hbketiquetecolisimo
+  title: 'Edit'
+
+entity.hbketiquetecolisimo.delete_form:
+  route_name: entity.hbketiquetecolisimo.delete_form
+  group: hbketiquetecolisimo
+  title: 'Delete'
+  weight: 10
